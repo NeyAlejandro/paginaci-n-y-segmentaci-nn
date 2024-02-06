@@ -1,1 +1,1 @@
-# paginaci-n-y-segmentaci-nn
+# paginación-y-segmentación
