@@ -1,0 +1,43 @@
+class SegmentacionMemoria:
+    def __init__(self):
+        self.segmentos = {}
+
+    def asignar_segmento(self, proceso, base, limite):
+        if proceso in self.segmentos:
+            print(f"Error: El proceso '{proceso}' ya tiene un segmento asignado.")
+            return
+        self.segmentos[proceso] = {'base': base, 'limite': limite}
+
+    def leer_memoria(self, proceso, direccion):
+        if proceso not in self.segmentos:
+            print(f"Error: El proceso '{proceso}' no tiene un segmento asignado.")
+            return None
+        base = self.segmentos[proceso]['base']
+        limite = self.segmentos[proceso]['limite']
+        if direccion < base or direccion >= base + limite:
+            print(f"Error: Dirección de memoria fuera de rango para el proceso '{proceso}'.")
+            return None
+        return f"Dato leído desde la dirección de memoria {direccion} del proceso '{proceso}'."
+
+    def escribir_memoria(self, proceso, direccion, dato):
+        if proceso not in self.segmentos:
+            print(f"Error: El proceso '{proceso}' no tiene un segmento asignado.")
+            return
+        base = self.segmentos[proceso]['base']
+        limite = self.segmentos[proceso]['limite']
+        if direccion < base or direccion >= base + limite:
+            print(f"Error: Dirección de memoria fuera de rango para el proceso '{proceso}'.")
+            return
+        print(f"Escribiendo '{dato}' en la dirección de memoria {direccion} del proceso '{proceso}'.")
+
+
+# Ejemplo de uso
+segmentacion = SegmentacionMemoria()
+
+# Asignar segmentos a procesos
+segmentacion.asignar_segmento(proceso='ProcesoA', base=0, limite=100)
+segmentacion.asignar_segmento(proceso='ProcesoB', base=200, limite=150)
+
+# Leer y escribir en memoria
+print(segmentacion.leer_memoria(proceso='ProcesoA', direccion=50))  # Salida: Dato leído desde la dirección de memoria 50 del proceso 'ProcesoA'.
+segmentacion.escribir_memoria(proceso='ProcesoB', direccion=250, dato='Hola')  # Salida: Escribiendo 'Hola' en la dirección de memoria 250 del proceso 'ProcesoB'.
