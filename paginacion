@@ -1,0 +1,28 @@
+class PaginacionMemoria:
+    def __init__(self, memoria_total, tamano_pagina):
+        self.memoria_total = memoria_total
+        self.tamano_pagina = tamano_pagina
+        self.paginas = [[] for _ in range(memoria_total // tamano_pagina)]
+
+    def escribir_memoria(self, direccion, dato):
+        pagina_idx = direccion // self.tamano_pagina
+        offset = direccion % self.tamano_pagina
+        if pagina_idx >= len(self.paginas):
+            print("Error: Dirección de memoria fuera de rango.")
+            return
+        if offset >= len(self.paginas[pagina_idx]):
+            self.paginas[pagina_idx].extend([None] * (offset - len(self.paginas[pagina_idx]) + 1))
+        self.paginas[pagina_idx][offset] = dato
+
+    def leer_memoria(self, direccion):
+        pagina_idx = direccion // self.tamano_pagina
+        offset = direccion % self.tamano_pagina
+        if pagina_idx >= len(self.paginas) or offset >= len(self.paginas[pagina_idx]):
+            print("Error: Dirección de memoria fuera de rango.")
+            return None
+        return self.paginas[pagina_idx][offset]
+
+# Ejemplo de uso
+paginacion = PaginacionMemoria(memoria_total=1024, tamano_pagina=64)
+paginacion.escribir_memoria(direccion=128, dato="Hola")
+print(paginacion.leer_memoria(direccion=128))  # Salida: Hola
